@@ -18,6 +18,13 @@ import {HttpClientModule} from "@angular/common/http";
 import {ConfigService} from "./config/config.service";
 import {AccountComponent} from './components/account/account.component';
 import {CookieService} from "ngx-cookie-service";
+import { CreateFormComponent } from './components/create-form/create-form.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatInputModule} from "@angular/material/input";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {DebounceClickDirective} from "./debounce-click.directive";
+import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -26,7 +33,9 @@ import {CookieService} from "ngx-cookie-service";
     RegisterComponent,
     RegisterComponent,
     LogInComponent,
-    AccountComponent
+    AccountComponent,
+    DebounceClickDirective,
+    CreateFormComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +45,10 @@ import {CookieService} from "ngx-cookie-service";
     AngularMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
     FlexLayoutModule
   ],
   providers: [
@@ -43,6 +56,9 @@ import {CookieService} from "ngx-cookie-service";
     CookieService
   ],
   bootstrap: [AppComponent],
+  entryComponents: [
+    CreateFormComponent
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 

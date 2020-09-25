@@ -38,6 +38,7 @@ export class LogInComponent implements OnInit {
       next: (data : AuthUser) => {
         this.cookieService.set('Token', data.token);
         this.cookieService.set('Username', data.username);
+        this.cookieService.set('UserId', data.userId);
         this.router.navigate(['/account'])
       },
       error: error => console.error('There was an error!', error)
