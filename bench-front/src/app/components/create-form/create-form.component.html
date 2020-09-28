@@ -1,0 +1,32 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+  <mat-card class="box">
+    <mat-card-header>
+      <mat-card-title>Create new form</mat-card-title>
+    </mat-card-header>
+
+    <form class="example-form" [formGroup]="formForm" (submit)="submit()">
+      <mat-card-content>
+        <mat-form-field class="example-full-width">
+          <input formControlName="name" matInput placeholder="name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <label>
+            <textarea
+              formControlName="request"
+              matInput
+              placeholder="Request">
+            </textarea>
+          </label>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input formControlName="phone" matInput placeholder="phone">
+        </mat-form-field>
+        <mat-dialog-actions>
+          <button class="mat-raised-button" (click)="close()">Close</button>
+          <button appDebounceClick class="mat-raised-button mat-primary" [debounceTime]="700" (click)="submit()">Save</button>
+        </mat-dialog-actions>
+      </mat-card-content>
+    </form>
+  </mat-card>
+</div>
