@@ -2,4 +2,5 @@ export class AuthUser {
   username: string;
   token: string;
   userId: string;
+  admin: boolean;
 }

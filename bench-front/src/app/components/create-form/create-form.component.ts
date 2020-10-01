@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {Form} from "../../models/form";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ConfigService} from "../../config/config.service";
+import {BackendService} from "../../service/backend.service";
 import {CookieService} from "ngx-cookie-service";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {AccountComponent} from "../account/account.component";
@@ -17,7 +17,7 @@ export class CreateFormComponent implements OnInit {
   formForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private configService: ConfigService,
+              private configService: BackendService,
               private cookieService: CookieService,
               public dialog: MatDialog,
               private dialogRef: MatDialogRef<AccountComponent>,

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {ConfigService} from "../../config/config.service";
+import {BackendService} from "../../service/backend.service";
 import {User} from "../../models/user";
 import {CookieService} from "ngx-cookie-service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
@@ -19,20 +19,31 @@ import {MatTableDataSource} from "@angular/material/table";
 export class AccountComponent implements OnInit, AfterViewInit {
 
 
-  @ViewChild(MatSort) sort: MatSort;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) userFormsSort: MatSort;
+  @ViewChild(MatPaginator) userFormsPaginator: MatPaginator;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-    this.paginator = mp;
+    this.userFormsPaginator = mp;
     this.setDataSourceAttributes();
   }
 
-  dataSource = new MatTableDataSource();
+  userFormsDataSource = new MatTableDataSource();
+  userFormDisplayedColumns: string[] = ['name', 'request', 'edit'];
 
-  displayedColumns: string[] = ['name', 'request', 'edit'];
+
+  @ViewChild(MatSort) userSort: MatSort;
+  @ViewChild(MatPaginator) usersPaginator: MatPaginator;
+
+  @ViewChild(MatPaginator) set usersMatPaginator(mp: MatPaginator) {
+    this.userFormsPaginator = mp;
+    this.setDataSourceAttributesForUsers();
+  }
+
+  usersDataSource = new MatTableDataSource();
+  usersDisplayedColumns: string[] = ['username', 'lastName', 'edit'];
 
   forms: Form[];
+  users: Form[];
   user: User = new User();
 
   userForm = new FormGroup({
@@ -44,26 +55,35 @@ export class AccountComponent implements OnInit, AfterViewInit {
     enabled: new FormControl(['', Validators.required])
   });
 
-  constructor(private service: ConfigService,
+  constructor(private service: BackendService,
               private cookieService: CookieService,
               private dialog: MatDialog) {
   }
 
-  setDataSourceAttributes() {
-    this.service.getUserForms(this.cookieService.get("UserId")).subscribe({
-      next: (data: []) => {
-        this.forms = data;
-        this.dataSource = new MatTableDataSource(this.forms);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      error: error => console.error('There was an error!', error)
-    });
-
-  }
 
   ngOnInit(): void {
     this.initUserData();
+  }
+
+  ngAfterViewInit() {
+    this.userFormsDataSource.paginator = this.userFormsPaginator;
+  }
+
+  createNewForm() {
+    const dialogConfig = new MatDialogConfig();
+    this.dialog.open(CreateFormComponent, dialogConfig);
+  }
+
+  editForm(form: Form) {
+    this.dialog.open(CreateFormComponent, {
+      data: {data: form}
+    });
+  }
+
+  makeAdmin(user: User) {
+    this.service.makeAdmin(user.id).subscribe({
+      next: data => alert("Ok")
+    });
   }
 
   private initUserData() {
@@ -75,19 +95,47 @@ export class AccountComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  private setDataSourceAttributes() {
+    if (Boolean(this.cookieService.get("admin"))) {
+      this.service.getAllForms().subscribe({
+          next: (data: []) => {
+            this.initForms(data);
+          },
+          error: error => console.error('There was an error!', error)
+        }
+      );
+    } else {
+      this.service.getUserForms(this.cookieService.get("UserId")).subscribe({
+        next: (data: []) => {
+          this.initForms(data);
+        },
+        error: error => console.error('There was an error!', error)
+      });
+    }
   }
 
-
-  createNewForm() {
-    const dialogConfig = new MatDialogConfig();
-    this.dialog.open(CreateFormComponent, dialogConfig);
+  private setDataSourceAttributesForUsers() {
+    if (Boolean(this.cookieService.get("admin"))) {
+      this.service.getAllUsers().subscribe({
+        next: (data: []) => {
+          this.initUsers(data);
+        },
+        error: error => console.error('There was an error!', error)
+      })
+    }
   }
 
-  editForm(form: Form) {
-    this.dialog.open(CreateFormComponent, {
-      data: {data: form}
-    });
+  private initForms(data: []) {
+    this.forms = data;
+    this.userFormsDataSource = new MatTableDataSource(this.forms);
+    this.userFormsDataSource.paginator = this.userFormsPaginator;
+    this.userFormsDataSource.sort = this.userFormsSort;
+  }
+
+  private initUsers(data: []) {
+    this.users = data;
+    this.usersDataSource = new MatTableDataSource(this.users);
+    this.usersDataSource.paginator = this.usersPaginator;
+    this.usersDataSource.sort = this.userSort;
   }
 }

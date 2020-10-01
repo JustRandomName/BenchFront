@@ -15,16 +15,15 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {LogInComponent} from './components/log-in/log-in.component';
 import {RegisterComponent} from './components/register/register.component';
 import {HttpClientModule} from "@angular/common/http";
-import {ConfigService} from "./config/config.service";
+import {BackendService} from "./service/backend.service";
 import {AccountComponent} from './components/account/account.component';
-import {CookieService} from "ngx-cookie-service";
-import { CreateFormComponent } from './components/create-form/create-form.component';
+import {CreateFormComponent} from './components/create-form/create-form.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {DebounceClickDirective} from "./debounce-click.directive";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {CookieHelper} from "./service/cookie.helper";
 
 @NgModule({
   declarations: [
@@ -52,8 +51,8 @@ import {MatTableDataSource} from "@angular/material/table";
     FlexLayoutModule
   ],
   providers: [
-    ConfigService,
-    CookieService
+    BackendService,
+    CookieHelper
   ],
   bootstrap: [AppComponent],
   entryComponents: [

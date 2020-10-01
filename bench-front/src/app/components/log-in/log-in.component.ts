@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ConfigService} from "../../config/config.service";
+import {BackendService} from "../../service/backend.service";
 import {AuthUser} from "../../models/authUser";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {User} from "../../models/user";
+import {CookieHelper} from "../../service/cookie.helper";
 
 @Component({
   selector: 'app-log-in',
@@ -16,9 +17,9 @@ export class LogInComponent implements OnInit {
   user: User = new User();
 
   constructor(private formBuilder: FormBuilder,
-              private service: ConfigService,
+              private service: BackendService,
               private router: Router,
-              private cookieService: CookieService) {
+              private cookieHelper: CookieHelper) {
   }
 
   ngOnInit(): void {
@@ -36,9 +37,7 @@ export class LogInComponent implements OnInit {
     this.user.password = this.loginForm.value.password;
     this.service.authUser(this.user).subscribe({
       next: (data : AuthUser) => {
-        this.cookieService.set('Token', data.token);
-        this.cookieService.set('Username', data.username);
-        this.cookieService.set('UserId', data.userId);
+        this.cookieHelper.saveUserInfo(data);
         this.router.navigate(['/account'])
       },
       error: error => console.error('There was an error!', error)
