@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {CookieService} from "ngx-cookie-service";
 import {User} from "../models/user";
 import {Form} from "../models/form";
+import {CookieHelper} from "./cookie.helper";
 
 @Injectable()
 export class BackendService {
   constructor(private http: HttpClient,
-              private cookieService: CookieService) {
+              private cookieHelper: CookieHelper) {
   }
 
 
@@ -23,7 +23,7 @@ export class BackendService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${this.cookieService.get("Token")}`
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
         }
       });
   }
@@ -35,7 +35,7 @@ export class BackendService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${this.cookieService.get("Token")}`
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
         }
       });
   }
@@ -47,7 +47,7 @@ export class BackendService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${this.cookieService.get("Token")}`
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
         }
       });
   }
@@ -59,7 +59,7 @@ export class BackendService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${this.cookieService.get("Token")}`
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
         }
       });
   }
@@ -71,7 +71,7 @@ export class BackendService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${this.cookieService.get("Token")}`
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
         }
       });
   }
@@ -83,7 +83,18 @@ export class BackendService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${this.cookieService.get("Token")}`
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
+        }
+      });
+  }
+
+  register(user: User) {
+    return this.http.post('http://localhost:8091/registration', user,
+      {
+        responseType: 'json',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       });
   }

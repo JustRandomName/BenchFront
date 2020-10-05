@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {CookieService} from "ngx-cookie-service";
+import {CookieHelper} from "./service/cookie.helper";
 
 @Component({
   selector: 'app-root',
@@ -9,10 +9,10 @@ import {CookieService} from "ngx-cookie-service";
 export class AppComponent {
   title = 'Bench';
 
-  constructor(private cookieService: CookieService) {
+  constructor(private cookieHelper: CookieHelper) {
   }
 
   getLogButtonTitle() {
-    return this.cookieService.get("Token") ? "Logout" : "Login";
+    return this.cookieHelper.getToken() ? "Logout" : "Login";
   }
 }

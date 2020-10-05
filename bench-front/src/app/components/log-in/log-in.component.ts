@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BackendService} from "../../service/backend.service";
 import {AuthUser} from "../../models/authUser";
 import {Router} from "@angular/router";
-import {CookieService} from "ngx-cookie-service";
 import {User} from "../../models/user";
 import {CookieHelper} from "../../service/cookie.helper";
 
@@ -36,7 +35,7 @@ export class LogInComponent implements OnInit {
     this.user.username = this.loginForm.value.username;
     this.user.password = this.loginForm.value.password;
     this.service.authUser(this.user).subscribe({
-      next: (data : AuthUser) => {
+      next: (data: AuthUser) => {
         this.cookieHelper.saveUserInfo(data);
         this.router.navigate(['/account'])
       },

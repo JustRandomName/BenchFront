@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {BackendService} from "../../service/backend.service";
 import {User} from "../../models/user";
-import {CookieService} from "ngx-cookie-service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Form} from "../../models/form";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
@@ -9,6 +8,7 @@ import {CreateFormComponent} from "../create-form/create-form.component";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
+import {CookieHelper} from "../../service/cookie.helper";
 
 
 @Component({
@@ -56,7 +56,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
   });
 
   constructor(private service: BackendService,
-              private cookieService: CookieService,
+              private cookieHelper: CookieHelper,
               private dialog: MatDialog) {
   }
 
@@ -87,7 +87,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
   }
 
   private initUserData() {
-    this.service.getUserInfo(this.cookieService.get("Username")).subscribe({
+    this.service.getUserInfo(this.cookieHelper.getCookie("Username")).subscribe({
       next: (data: User) => {
         this.user = data;
       },
@@ -96,7 +96,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
   }
 
   private setDataSourceAttributes() {
-    if (Boolean(this.cookieService.get("admin"))) {
+    if (Boolean(this.cookieHelper.getCookie("admin"))) {
       this.service.getAllForms().subscribe({
           next: (data: []) => {
             this.initForms(data);
@@ -105,7 +105,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
         }
       );
     } else {
-      this.service.getUserForms(this.cookieService.get("UserId")).subscribe({
+      this.service.getUserForms(this.cookieHelper.getCookie("UserId")).subscribe({
         next: (data: []) => {
           this.initForms(data);
         },
@@ -115,7 +115,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
   }
 
   private setDataSourceAttributesForUsers() {
-    if (Boolean(this.cookieService.get("admin"))) {
+    if (Boolean(this.cookieHelper.getCookie("admin"))) {
       this.service.getAllUsers().subscribe({
         next: (data: []) => {
           this.initUsers(data);
