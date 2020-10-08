@@ -19,10 +19,17 @@ export class CookieHelper {
     this.cookieService.set('Token', user.token);
     this.cookieService.set('Username', user.username);
     this.cookieService.set('UserId', user.userId);
-    this.cookieService.set('admin', Boolean(user.admin).toString());
+    this.cookieService.set('admin', String(user.admin));
   }
 
   getToken() {
     return this.cookieService.get('Token');
+  }
+
+  cleanUserInfo() {
+    this.cookieService.delete('Token');
+    this.cookieService.delete('Username');
+    this.cookieService.delete('UserId');
+    this.cookieService.delete('admin');
   }
 }

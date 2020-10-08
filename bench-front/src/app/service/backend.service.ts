@@ -98,4 +98,16 @@ export class BackendService {
         }
       });
   }
+
+  updateUser(user: User) {
+    return this.http.post('http://localhost:8091/update', user,
+      {
+        responseType: 'json',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${this.cookieHelper.getToken()}`
+        }
+      });
+  }
 }

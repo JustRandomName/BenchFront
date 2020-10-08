@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {BackendService} from "../../service/backend.service";
 import {User} from "../../models/user";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Form} from "../../models/form";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {CreateFormComponent} from "../create-form/create-form.component";
@@ -9,6 +9,7 @@ import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {CookieHelper} from "../../service/cookie.helper";
+import {AuthUser} from "../../models/authUser";
 
 
 @Component({
@@ -45,23 +46,27 @@ export class AccountComponent implements OnInit, AfterViewInit {
   forms: Form[];
   users: Form[];
   user: User = new User();
+  isAdmin: Boolean;
 
   userForm = new FormGroup({
-    firstName: new FormControl(['', Validators.required]),
-    lastName: new FormControl(['', Validators.required]),
-    middleName: new FormControl(['', Validators.required]),
-    DOB: new FormControl(['']),
-    username: new FormControl(['', Validators.required]),
-    enabled: new FormControl(['', Validators.required])
+    firstName: new FormControl(),
+    lastName: new FormControl(),
+    middleName: new FormControl(),
+    DOB: new FormControl(),
+    username: new FormControl(),
+    enabled: new FormControl(),
+    id: new FormControl()
   });
 
   constructor(private service: BackendService,
               private cookieHelper: CookieHelper,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private formBuilder: FormBuilder) {
   }
 
 
   ngOnInit(): void {
+    this.isAdmin = this.cookieHelper.getCookie("admin").toLowerCase() == 'true';
     this.initUserData();
   }
 
@@ -89,6 +94,15 @@ export class AccountComponent implements OnInit, AfterViewInit {
   private initUserData() {
     this.service.getUserInfo(this.cookieHelper.getCookie("Username")).subscribe({
       next: (data: User) => {
+        this.userForm = this.formBuilder.group({
+          firstName: new FormControl(data.firstName),
+          lastName: new FormControl(data.lastName),
+          middleName: new FormControl(data.middleName),
+          DOB: new FormControl(data.dob),
+          username: new FormControl(data.username),
+          enabled: new FormControl(data.enabled),
+          id: new FormControl(data.id)
+        });
         this.user = data;
       },
       error: error => console.error('There was an error!', error)
@@ -96,7 +110,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
   }
 
   private setDataSourceAttributes() {
-    if (Boolean(this.cookieHelper.getCookie("admin"))) {
+    if (this.isAdmin) {
       this.service.getAllForms().subscribe({
           next: (data: []) => {
             this.initForms(data);
@@ -115,7 +129,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
   }
 
   private setDataSourceAttributesForUsers() {
-    if (Boolean(this.cookieHelper.getCookie("admin"))) {
+    if (this.isAdmin) {
       this.service.getAllUsers().subscribe({
         next: (data: []) => {
           this.initUsers(data);
@@ -137,5 +151,23 @@ export class AccountComponent implements OnInit, AfterViewInit {
     this.usersDataSource = new MatTableDataSource(this.users);
     this.usersDataSource.paginator = this.usersPaginator;
     this.usersDataSource.sort = this.userSort;
+  }
+
+  updateUser() {
+    this.user.firstName = this.userForm.value.firstName;
+    this.user.lastName = this.userForm.value.lastName;
+    this.user.middleName = this.userForm.value.middleName;
+    this.user.dob = this.userForm.value.DOB;
+    this.user.username = this.userForm.value.username;
+    this.user.password = this.userForm.value.password;
+    alert(JSON.stringify(this.user));
+    this.service.updateUser(this.user).subscribe({
+      next: (data: AuthUser) => {
+        alert("Ok");
+      },
+      error: error => console.error('There was an error!', error)
+    })
+
+
   }
 }

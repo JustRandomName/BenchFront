@@ -15,4 +15,8 @@ export class AppComponent {
   getLogButtonTitle() {
     return this.cookieHelper.getToken() ? "Logout" : "Login";
   }
+
+  logout() {
+    this.cookieHelper.cleanUserInfo();
+  }
 }

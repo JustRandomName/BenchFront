@@ -24,6 +24,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {DebounceClickDirective} from "./debounce-click.directive";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {CookieHelper} from "./service/cookie.helper";
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatButtonModule} from "@angular/material/button";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
@@ -44,6 +47,10 @@ import {CookieHelper} from "./service/cookie.helper";
     AngularMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    MatDatepickerModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,

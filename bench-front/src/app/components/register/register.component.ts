@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
     this.user.firstName = this.registerForm.value.firstName;
     this.user.lastName = this.registerForm.value.lastName;
     this.user.middleName = this.registerForm.value.middleName;
-    this.user.DOB = this.registerForm.value.DOB;
+    this.user.dob = this.registerForm.value.dob;
     this.user.username = this.registerForm.value.username;
     this.user.password = this.registerForm.value.password;
     alert(this.user.username);

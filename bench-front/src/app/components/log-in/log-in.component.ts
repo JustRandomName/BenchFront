@@ -37,6 +37,7 @@ export class LogInComponent implements OnInit {
     this.service.authUser(this.user).subscribe({
       next: (data: AuthUser) => {
         this.cookieHelper.saveUserInfo(data);
+        alert(data.admin);
         this.router.navigate(['/account'])
       },
       error: error => console.error('There was an error!', error)

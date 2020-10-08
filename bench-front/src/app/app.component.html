@@ -2,7 +2,7 @@
 <mat-toolbar color="primary" class="app-header">
   <div><a href="https://www.positronx.io" target="_blank" class="positronx">Bench</a></div>
   <span class="nav-tool-items">
-    <a mat-button routerLink="login" routerLinkActive="active">{{getLogButtonTitle()}}</a>
+    <a mat-button routerLink="login" routerLinkActive="active" (click)="logout()">{{getLogButtonTitle()}}</a>
     <a mat-button mat-raised-button routerLink="register" routerLinkActive="active">Register</a>
   </span>
 </mat-toolbar>
