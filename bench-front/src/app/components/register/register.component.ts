@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../models/user";
 import {BackendService} from "../../service/backend.service";
 import {AuthUser} from "../../models/authUser";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,7 @@ export class RegisterComponent implements OnInit {
   user: User = new User();
 
   constructor(private formBuilder: FormBuilder,
+              private router: Router,
               private backendService: BackendService) {
   }
 
@@ -37,10 +39,10 @@ export class RegisterComponent implements OnInit {
     this.user.dob = this.registerForm.value.dob;
     this.user.username = this.registerForm.value.username;
     this.user.password = this.registerForm.value.password;
-    alert(this.user.username);
     this.backendService.register(this.user).subscribe({
       next: (data: AuthUser) => {
-        alert("Ok");
+        alert("You register in Bench Request System. Please check you email");
+        this.router.navigate(['/login'])
       },
       error: error => console.error('There was an error!', error)
     })

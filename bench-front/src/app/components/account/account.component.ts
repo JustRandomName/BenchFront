@@ -87,7 +87,7 @@ export class AccountComponent implements OnInit, AfterViewInit {
 
   makeAdmin(user: User) {
     this.service.makeAdmin(user.id).subscribe({
-      next: data => alert("Ok")
+      next: data => alert("Now user: " + user.username +" is admin")
     });
   }
 
@@ -160,10 +160,9 @@ export class AccountComponent implements OnInit, AfterViewInit {
     this.user.dob = this.userForm.value.DOB;
     this.user.username = this.userForm.value.username;
     this.user.password = this.userForm.value.password;
-    alert(JSON.stringify(this.user));
     this.service.updateUser(this.user).subscribe({
       next: (data: AuthUser) => {
-        alert("Ok");
+        alert("User updated successfully");
       },
       error: error => console.error('There was an error!', error)
     })
